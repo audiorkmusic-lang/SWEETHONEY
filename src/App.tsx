@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from '@/lib/auth';
+import { CartProvider } from '@/lib/cart';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ProductHighlight from '@/components/ProductHighlight';
@@ -9,6 +10,7 @@ import StoreLocations from '@/components/StoreLocations';
 import CustomerReviews from '@/components/CustomerReviews';
 import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
+import CartDrawer from '@/components/CartDrawer';
 import AdminLogin from '@/components/admin/AdminLogin';
 import AdminDashboard from '@/components/admin/AdminDashboard';
 
@@ -58,6 +60,7 @@ function AppContent() {
         <FinalCTA />
       </main>
       <Footer />
+      <CartDrawer />
     </div>
   );
 }
@@ -65,7 +68,9 @@ function AppContent() {
 export default function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <CartProvider>
+        <AppContent />
+      </CartProvider>
     </AuthProvider>
   );
 }

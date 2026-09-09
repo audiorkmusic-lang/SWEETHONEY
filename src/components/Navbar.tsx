@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Menu, X, ShoppingBag } from 'lucide-react';
+import { Menu, X, ShoppingBag, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/lib/cart';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -12,6 +13,7 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { itemCount, openCart } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -68,22 +70,39 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Desktop CTA */}
-        <button
-          onClick={() => handleNavClick('#products')}
-          className="hidden rounded-full bg-gradient-to-r from-honey-400 to-honey-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-honey-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-honey-400/40 hover:-translate-y-0.5 active:translate-y-0 lg:block"
-        >
-          Shop Now
-        </button>
+        {/* Right side: cart + CTA + mobile menu */}
+        <div className="flex items-center gap-3">
+          {/* Cart icon */}
+          <button
+            onClick={openCart}
+            className="relative flex h-10 w-10 items-center justify-center rounded-full bg-cream-100 text-brown-800 transition-colors hover:bg-cream-200"
+            aria-label="Open cart"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            {itemCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-gradient-to-r from-honey-400 to-honey-500 px-1 text-[11px] font-bold text-white shadow-md">
+                {itemCount}
+              </span>
+            )}
+          </button>
 
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMenuOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-cream-100 text-brown-800 transition-colors hover:bg-cream-200 lg:hidden"
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+          {/* Desktop CTA */}
+          <button
+            onClick={() => handleNavClick('#products')}
+            className="hidden rounded-full bg-gradient-to-r from-honey-400 to-honey-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-honey-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-honey-400/40 hover:-translate-y-0.5 active:translate-y-0 lg:block"
+          >
+            Shop Now
+          </button>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-cream-100 text-brown-800 transition-colors hover:bg-cream-200 lg:hidden"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}

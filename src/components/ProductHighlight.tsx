@@ -4,11 +4,22 @@ import { getProducts } from '@/lib/api';
 import type { Product } from '@/lib/types';
 import { products as fallbackProducts } from '@/data/content';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useCart } from '@/lib/cart';
 
 export default function ProductHighlight() {
   const { ref, isVisible } = useScrollReveal<HTMLDivElement>();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const { addItem } = useCart();
+
+  const handleAddToCart = (product: Product) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image ?? '',
+    });
+  };
 
   useEffect(() => {
     getProducts()
@@ -110,7 +121,10 @@ export default function ProductHighlight() {
                             ? product.price.toFixed(2)
                             : product.price}
                         </span>
-                        <button className="flex items-center gap-2 rounded-full bg-gradient-to-r from-honey-400 to-honey-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-honey-400/25 transition-all duration-300 hover:shadow-xl hover:shadow-honey-400/35 group-hover:scale-105 active:scale-95">
+                        <button
+                          onClick={() => handleAddToCart(product)}
+                          className="flex items-center gap-2 rounded-full bg-gradient-to-r from-honey-400 to-honey-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-honey-400/25 transition-all duration-300 hover:shadow-xl hover:shadow-honey-400/35 group-hover:scale-105 active:scale-95"
+                        >
                           <Plus className="h-4 w-4" strokeWidth={2.5} />
                           Add to Cart
                         </button>

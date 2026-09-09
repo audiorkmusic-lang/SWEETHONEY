@@ -19,6 +19,17 @@ export default function StoreLocations() {
       .catch(() => setLoading(false));
   }, []);
 
+  const handleViewLocation = (store: Store) => {
+    let url: string;
+    if (store.latitude != null && store.longitude != null) {
+      url = `https://www.google.com/maps/search/?api=1&query=${store.latitude},${store.longitude}`;
+    } else {
+      const query = encodeURIComponent(`${store.name}, ${store.address}`);
+      url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   const displayStores =
     stores.length > 0
       ? stores
@@ -108,7 +119,10 @@ export default function StoreLocations() {
                     <p className="mt-1.5 text-sm leading-relaxed text-brown-700/70">
                       {store.address}
                     </p>
-                    <button className="group/btn mt-4 flex items-center gap-1.5 text-sm font-semibold text-honey-600 transition-colors hover:text-honey-700">
+                    <button
+                      onClick={() => handleViewLocation(store)}
+                      className="group/btn mt-4 flex items-center gap-1.5 text-sm font-semibold text-honey-600 transition-colors hover:text-honey-700"
+                    >
                       View Location
                       <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                     </button>
